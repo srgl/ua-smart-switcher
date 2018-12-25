@@ -4,7 +4,8 @@ const CleanWebpackPlugin = require('clean-webpack-plugin')
 
 module.exports = {
   entry: {
-    popup: __dirname + '/src/js/popup.js'
+    popup: __dirname + '/src/js/popup.js',
+    background: __dirname + '/src/js/background.js'
   },
   output: {
     path: __dirname + '/build',
@@ -13,7 +14,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.(js|jsx)$/,
+        test: /\.js$/,
         exclude: /node_modules/,
         use: ['babel-loader']
       }
@@ -30,7 +31,8 @@ module.exports = {
     }]),
     new HtmlWebpackPlugin({
       template: __dirname + '/src/popup.html',
-      filename: 'popup.html'
+      filename: 'popup.html',
+      chunks: ['popup']
     })
   ]
 }
