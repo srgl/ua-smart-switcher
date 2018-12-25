@@ -1,0 +1,27 @@
+html, body {
+  font-family: 'Open Sans', Sans;
+  font-size: 10pt;
+  width: 240px;
+  margin: 0;
+  padding: 0;
+}
+
+#container {
+  margin: 10px;
+}
+
+.popup .header {
+  margin: 0;
+  display: inline;
+}
+
+.popup .right {
+  float: right;
+}
+
+.popup .row {
+  margin: 12px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between
+}

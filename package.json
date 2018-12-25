@@ -1,9 +1,8 @@
 {
-  "name": "uass",
-  "version": "0.0.1",
-  "description": "Spoofs your platform os keeping browser version actual",
+  "name": "crx",
+  "version": "1.0.0",
   "scripts": {
-    "start": "webpack -w --mode development",
+    "start": "webpack -w --mode production",
     "build": "webpack"
   },
   "devDependencies": {

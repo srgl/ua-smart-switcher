@@ -22,18 +22,11 @@ module.exports = {
   plugins: [
     new CleanWebpackPlugin(['build']),
     new CopyWebpackPlugin([{
-      from: 'src/manifest.json',
-      transform: content => {
-        return Buffer.from(JSON.stringify({
-          name: process.env.npm_package_name,
-          description: process.env.npm_package_description,
-          version: process.env.npm_package_version,
-          ...JSON.parse(content.toString())
-        }))
-      }
+      from: 'src/manifest.json'
     }, {
-      from: 'src/img',
-      to: '.'
+      from: 'src/img'
+    }, {
+      from: 'src/css'
     }]),
     new HtmlWebpackPlugin({
       template: __dirname + '/src/popup.html',
