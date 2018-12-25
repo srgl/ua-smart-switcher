@@ -20,7 +20,7 @@ const browsers = [
 ]
 
 for (let platform in data) {
-  data[platform] = browsers
+  data[platform].asArray = browsers
     .filter(({ id }) => (id in data[platform]))
     .map(({ id, name }) => ({ ...data[platform][id], id, name }))
 }
@@ -31,7 +31,7 @@ class Popup extends Component {
     this.state = {
       enabled: false,
       platform: platforms[0].id,
-      browser: data[platforms[0].id][0].id
+      browser: data[platforms[0].id].asArray[0].id
     }
     chrome.storage.local.get(this.state, state => {
       this.setState(state)
@@ -46,13 +46,17 @@ class Popup extends Component {
 
   setPlatform (e) {
     const platform = e.target.value
-    this.setState({ platform, browser: data[platform][0].id }, () => {
+    const browser = data[platform].asArray[0].id
+    const ua = data[platform][browser].ua
+    this.setState({ platform, browser, ua }, () => {
       chrome.storage.local.set(this.state)
     })
   }
 
   setBrowser (e) {
-    this.setState({ browser: e.target.value }, () => {
+    const browser = e.target.value
+    const ua = data[this.state.platform][browser].ua
+    this.setState({ browser, ua }, () => {
       chrome.storage.local.set(this.state)
     })
   }
@@ -80,7 +84,7 @@ class Popup extends Component {
         <span>Browser:</span>
         <select class="right" disabled={!state.enabled} value={state.browser} onChange={this.setBrowser.bind(this)}>
           {
-            data[state.platform].map(browser => (
+            data[state.platform].asArray.map(browser => (
               <option value={browser.id}>{browser.name} {browser.version}</option>
             ))
           }
