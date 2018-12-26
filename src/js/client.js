@@ -27,3 +27,9 @@ const injectScript = ua => {
 chrome.storage.local.get(null, state => {
   if (state.enabled) injectScript(state.ua)
 })
+
+chrome.storage.onChanged.addListener(state => {
+  if (state.reload) {
+    window.location.reload(true)
+  }
+})

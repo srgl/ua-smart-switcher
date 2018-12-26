@@ -39,6 +39,7 @@ class Popup extends Component {
   }
 
   close () {
+    chrome.storage.local.set({ reload: Math.random() })
     setTimeout(() => window.close(), 200)
   }
 
