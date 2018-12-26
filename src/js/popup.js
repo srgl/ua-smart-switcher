@@ -28,13 +28,12 @@ for (let platform in data) {
 class Popup extends Component {
   constructor () {
     super()
-    this.state = {
-      enabled: null,
-      platform: platforms[0].id,
-      browser: data[platforms[0].id].asArray[0].id
-    }
-    chrome.storage.local.get(this.state, state => {
-      this.setState(state)
+    chrome.storage.local.get(null, state => {
+      this.setState({
+        enabled: state.enabled || false,
+        platform: state.platform || platforms[0].id,
+        browser: state.browser || data[platforms[0].id].asArray[0].id
+      })
     })
   }
 
@@ -73,7 +72,7 @@ class Popup extends Component {
     return <div class="popup">
       <div class="row">
         <h3 class="header">UA Smart Switcher</h3>
-        { state.enabled !== null &&
+        { state.enabled != null &&
           <label class="switch right">
             <input type="checkbox" checked={state.enabled} onChange={this.toggle.bind(this)} />
             <span class="slider round"></span>
@@ -84,7 +83,7 @@ class Popup extends Component {
         <span>Platform:</span>
         <select class="right" disabled={!state.enabled} value={state.platform} onChange={this.setPlatform.bind(this)}>
           {
-            platforms.map(platform => (
+            state.platform && platforms.map(platform => (
               <option value={platform.id}>{platform.name}</option>
             ))
           }
@@ -94,7 +93,7 @@ class Popup extends Component {
         <span>Browser:</span>
         <select class="right" disabled={!state.enabled} value={state.browser} onChange={this.setBrowser.bind(this)}>
           {
-            data[state.platform].asArray.map(browser => (
+            state.platform && data[state.platform].asArray.map(browser => (
               <option value={browser.id}>{browser.name} {browser.version}</option>
             ))
           }
