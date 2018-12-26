@@ -1,7 +1,7 @@
 import { h, render, Component } from 'preact'
-import data from '../data'
+import agents from '../agents'
 
-const platforms = [
+const oss = [
   { id: 'windows', name: 'Windows' },
   { id: 'mac_os', name: 'macOS' },
   { id: 'linux', name: 'Linux' },
@@ -19,11 +19,14 @@ const browsers = [
   { id: 'android_browser', name: 'Android' }
 ]
 
-for (let platform in data) {
-  data[platform].asArray = browsers
-    .filter(({ id }) => (id in data[platform]))
-    .map(({ id, name }) => ({ ...data[platform][id], id, name }))
-}
+agents.sort((a, b) => {
+  const aIndex = 10 * (oss.findIndex(os => os.id === a.os) + 1) +
+    browsers.findIndex(browser => browser.id === a.browser)
+  const bIndex = 10 * (oss.findIndex(os => os.id === b.os) + 1) +
+    browsers.findIndex(browser => browser.id === b.browser)
+
+  return aIndex - bIndex
+})
 
 class Popup extends Component {
   constructor () {
@@ -31,8 +34,8 @@ class Popup extends Component {
     chrome.storage.local.get(null, state => {
       this.setState({
         enabled: state.enabled || false,
-        platform: state.platform || platforms[0].id,
-        browser: state.browser || data[platforms[0].id].asArray[0].id
+        os: state.os || agents[0].os,
+        browser: state.browser || agents[0].browser
       })
     })
   }
@@ -50,24 +53,25 @@ class Popup extends Component {
     })
   }
 
-  setPlatform (e) {
-    const platform = e.target.value
-    const browser = data[platform].asArray[0].id
-    const ua = data[platform][browser].ua
-    this.setState({ platform, browser, ua }, () => {
+  setOs (e) {
+    const os = e.target.value
+    const { browser, ua } = agents.find(a => a.os === os)
+    this.setState({ os, browser, ua }, () => {
       chrome.storage.local.set(this.state)
     })
   }
 
   setBrowser (e) {
     const browser = e.target.value
-    const ua = data[this.state.platform][browser].ua
+    const { ua } = agents.find(a => (
+      a.os === this.state.os && a.browser === browser
+    ))
     this.setState({ browser, ua }, () => {
       chrome.storage.local.set(this.state, () => this.close())
     })
   }
 
-  shortVersion (version) {
+  trimVersion (version) {
     const match = version.match(/^(\d+)\.(\d+)/)
     if (match) {
       const major = match[1]
@@ -77,34 +81,44 @@ class Popup extends Component {
     return version
   }
 
+  browserName (browser) {
+    return browsers.find(b => b.id === browser).name
+  }
+
   render (props, state) {
     return <div class="popup">
       <div class="row">
         <h3 class="header">UA Smart Switcher</h3>
         { state.enabled != null &&
           <label class="switch right">
-            <input type="checkbox" checked={state.enabled} onChange={this.toggle.bind(this)} />
+            <input type="checkbox" checked={state.enabled}
+              onChange={this.toggle.bind(this)} />
             <span class="slider round"></span>
           </label>
         }
       </div>
       <div class="row">
         <span>Platform:</span>
-        <select class="right" disabled={!state.enabled} value={state.platform} onChange={this.setPlatform.bind(this)}>
+        <select class="right" disabled={!state.enabled}
+          value={state.os} onChange={this.setOs.bind(this)}>
           {
-            state.platform && platforms.map(platform => (
-              <option value={platform.id}>{platform.name}</option>
+            state.os && oss.map(os => (
+              <option value={os.id}>{os.name}</option>
             ))
           }
         </select>
       </div>
       <div class="row">
         <span>Browser:</span>
-        <select class="right" disabled={!state.enabled} value={state.browser} onChange={this.setBrowser.bind(this)}>
+        <select class="right" disabled={!state.enabled}
+          value={state.browser} onChange={this.setBrowser.bind(this)}>
           {
-            state.platform && data[state.platform].asArray.map(browser => (
-              <option value={browser.id}>{browser.name} {this.shortVersion(browser.version)}</option>
-            ))
+            state.os && agents.filter(a => a.os === state.os)
+              .map(agent => (
+                <option value={agent.browser}>
+                  {this.browserName(agent.browser)} {this.trimVersion(agent.version)}
+                </option>
+              ))
           }
         </select>
       </div>

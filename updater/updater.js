@@ -66,16 +66,10 @@ module.exports = class Updater {
   }
 
   getActualAgents (agents) {
-    const result = Object.keys(this.config).reduce((a, os) => (
-      { ...a,
-        [os]: this.config[os].browsers.reduce((a, browser) => (
-          { ...a, [browser]: { version: '0' } }
-        ), {})
-      }
-    ), {})
+    const results = []
 
-    agents.map(ua => {
-      let parsed = UAParser(ua)
+    agents.map(agent => {
+      let parsed = UAParser(agent)
       return {
         os: (parsed.os.name || '')
           .toLowerCase().replace(/\s+/g, '_'),
@@ -83,20 +77,22 @@ module.exports = class Updater {
           .toLowerCase().replace(/\s+/g, '_')
           .replace('mobile_safari', 'safari'),
         version: parsed.browser.version,
-        string: parsed.ua
+        ua: parsed.ua
       }
-    }).forEach(ua => {
-      const supported = ua.os in this.config &&
-        this.config[ua.os].browsers.includes(ua.browser)
+    }).forEach(agent => {
+      const supported = agent.os in this.config &&
+        this.config[agent.os].browsers.includes(agent.browser)
       if (supported) {
-        let version = result[ua.os][ua.browser].version
-        if (compareVersions(ua.version, version) === 1) {
-          result[ua.os][ua.browser].version = ua.version
-          result[ua.os][ua.browser].ua = ua.string
+        const result = results.find(r => r.os === agent.os && r.browser === agent.browser)
+        if (!result) results.push(agent)
+        if (result && (!result.version ||
+          compareVersions(agent.version, result.version) === 1)) {
+          result.version = agent.version
+          result.ua = agent.ua
         }
       }
     })
-    return result
+    return results
   }
 }
 
