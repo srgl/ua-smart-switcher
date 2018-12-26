@@ -29,7 +29,7 @@ class Popup extends Component {
   constructor () {
     super()
     this.state = {
-      enabled: false,
+      enabled: null,
       platform: platforms[0].id,
       browser: data[platforms[0].id].asArray[0].id
     }
@@ -38,11 +38,15 @@ class Popup extends Component {
     })
   }
 
+  close () {
+    setTimeout(() => window.close(), 200)
+  }
+
   toggle (e) {
     const enabled = e.target.checked
     this.setState({ enabled }, () => {
       chrome.storage.local.set(this.state, () => {
-        if (!enabled) window.close()
+        if (!enabled) this.close()
       })
     })
   }
@@ -60,7 +64,7 @@ class Popup extends Component {
     const browser = e.target.value
     const ua = data[this.state.platform][browser].ua
     this.setState({ browser, ua }, () => {
-      chrome.storage.local.set(this.state, () => window.close())
+      chrome.storage.local.set(this.state, () => this.close())
     })
   }
 
@@ -68,10 +72,12 @@ class Popup extends Component {
     return <div class="popup">
       <div class="row">
         <h3 class="header">UA Smart Switcher</h3>
-        <label class="switch right">
-          <input type="checkbox" checked={state.enabled} onChange={this.toggle.bind(this)} />
-          <span class="slider round"></span>
-        </label>
+        { state.enabled !== null &&
+          <label class="switch right">
+            <input type="checkbox" checked={state.enabled} onChange={this.toggle.bind(this)} />
+            <span class="slider round"></span>
+          </label>
+        }
       </div>
       <div class="row">
         <span>Platform:</span>
