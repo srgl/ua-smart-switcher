@@ -67,6 +67,16 @@ class Popup extends Component {
     })
   }
 
+  shortVersion (version) {
+    const match = version.match(/^(\d+)\.(\d+)/)
+    if (match) {
+      const major = match[1]
+      const minor = match[2]
+      return minor === '0' ? major : `${major}.${minor}`
+    }
+    return version
+  }
+
   render (props, state) {
     return <div class="popup">
       <div class="row">
@@ -93,7 +103,7 @@ class Popup extends Component {
         <select class="right" disabled={!state.enabled} value={state.browser} onChange={this.setBrowser.bind(this)}>
           {
             state.platform && data[state.platform].asArray.map(browser => (
-              <option value={browser.id}>{browser.name} {browser.version}</option>
+              <option value={browser.id}>{browser.name} {this.shortVersion(browser.version)}</option>
             ))
           }
         </select>

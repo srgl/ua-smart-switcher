@@ -1,67 +1,67 @@
 {
   "windows": {
     "chrome": {
-      "version": "70",
+      "version": "70.0.3538.102",
       "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36"
     },
     "firefox": {
-      "version": "63",
+      "version": "63.0",
       "ua": "Mozilla/5.0 (Windows NT 6.3; WOW64; rv:63.0) Gecko/20100101 Firefox/63.0"
     },
     "edge": {
-      "version": "17",
+      "version": "17.17134",
       "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.140 Safari/537.36 Edge/17.17134"
     },
     "ie": {
-      "version": "11",
+      "version": "11.0",
       "ua": "Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; rv:11.0) like Gecko"
     }
   },
   "mac_os": {
     "safari": {
-      "version": "12",
+      "version": "12.0.2",
       "ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.0.2 Safari/605.1.15"
     },
     "chrome": {
-      "version": "70",
+      "version": "70.0.3538.110",
       "ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.110 Safari/537.36"
     },
     "firefox": {
-      "version": "63",
+      "version": "63.0",
       "ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:63.0) Gecko/20100101 Firefox/63.0"
     }
   },
   "linux": {
     "chrome": {
-      "version": "69",
+      "version": "69.0.3497.100",
       "ua": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36"
     },
     "firefox": {
-      "version": "60",
+      "version": "60.0",
       "ua": "Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101 Firefox/60.0"
     }
   },
   "android": {
     "chrome": {
-      "version": "70",
+      "version": "70.0.3538.80",
       "ua": "Mozilla/5.0 (Linux; Android 7.0; SM-G610M) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.80 Mobile Safari/537.36"
     },
     "samsung_browser": {
-      "version": "7",
+      "version": "7.4",
       "ua": "Mozilla/5.0 (Linux; Android 7.0; SAMSUNG SM-G610M Build/NRD90M) AppleWebKit/537.36 (KHTML, like Gecko) SamsungBrowser/7.4 Chrome/59.0.3071.125 Mobile Safari/537.36"
     },
     "android_browser": {
-      "version": "4",
+      "version": "4.0",
       "ua": "Mozilla/5.0 (Linux; U; Android 2.2) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1"
     }
   },
   "ios": {
     "safari": {
-      "version": "12",
+      "version": "12.0",
       "ua": "Mozilla/5.0 (iPhone; CPU iPhone OS 12_0_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.0 Mobile/15E148 Safari/604.1"
     },
     "chrome": {
-      "version": "70",
+      "version": "70.0.3538.75",
       "ua": "Mozilla/5.0 (iPhone; CPU iPhone OS 12_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/70.0.3538.75 Mobile/15E148 Safari/605.1"
     }
   }
