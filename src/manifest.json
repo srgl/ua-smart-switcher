@@ -5,6 +5,14 @@
   "background": {
     "scripts": ["background.js"]
   },
+  "content_scripts": [
+    {
+      "matches": ["http://*/*", "https://*/*"],
+      "js": ["client.js"],
+      "run_at" : "document_start",
+      "all_frames": true
+    }
+  ],
   "browser_action": {
     "default_popup": "popup.html",
     "default_icon": "icon-34.png"
