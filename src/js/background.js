@@ -24,6 +24,6 @@ const onBeforeSendHeaders = ({ requestHeaders }) => {
 
 chrome.webRequest.onBeforeSendHeaders.addListener(
   onBeforeSendHeaders,
-  { 'urls': ['<all_urls>'] },
+  { 'urls': ['http://*/*', 'https://*/*'] },
   ['requestHeaders', 'blocking']
 )
