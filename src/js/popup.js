@@ -39,8 +39,11 @@ class Popup extends Component {
   }
 
   toggle (e) {
-    this.setState({ enabled: e.target.checked }, () => {
-      chrome.storage.local.set(this.state)
+    const enabled = e.target.checked
+    this.setState({ enabled }, () => {
+      chrome.storage.local.set(this.state, () => {
+        if (!enabled) window.close()
+      })
     })
   }
 
@@ -57,7 +60,7 @@ class Popup extends Component {
     const browser = e.target.value
     const ua = data[this.state.platform][browser].ua
     this.setState({ browser, ua }, () => {
-      chrome.storage.local.set(this.state)
+      chrome.storage.local.set(this.state, () => window.close())
     })
   }
 
