@@ -6,6 +6,8 @@ const UAParser = require('ua-parser-js')
 const compareVersions = require('compare-versions')
 const simpleGit = require('simple-git/promise')
 
+const SEMVER_REGEX = /^v?(?:\d+)(\.(?:[x*]|\d+)(\.(?:[x*]|\d+)(\.(?:[x*]|\d+))?(?:-[\da-z\-]+(?:\.[\da-z\-]+)*)?(?:\+[\da-z\-]+(?:\.[\da-z\-]+)*)?)?)?$/i;
+
 module.exports = class Updater {
   static async init () {
     const updater = new this()
@@ -14,7 +16,7 @@ module.exports = class Updater {
 
   constructor () {
     this.delay = 1
-    this.pages = 4
+    this.pages = 8
     this.config = {
       windows: {
         url: 'https://developers.whatismybrowser.com/useragents/explore/operating_system_name/windows/',
@@ -138,7 +140,8 @@ module.exports = class Updater {
       }
     }).forEach(agent => {
       const supported = agent.os in this.config &&
-        this.config[agent.os].browsers.includes(agent.browser)
+        this.config[agent.os].browsers.includes(agent.browser) &&
+        SEMVER_REGEX.test(agent.version)
       if (supported) {
         const result = results.find(r => r.os === agent.os && r.browser === agent.browser)
         if (!result) results.push(agent)
