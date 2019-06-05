@@ -35,7 +35,9 @@ const getAgents = callback => {
 const updateLoop = (delay) => {
   setTimeout(() => {
     getAgents(agents => {
-      if (agents) chrome.storage.local.set({ agents })
+      if (agents && Object.keys(agents).length > 0) {
+        chrome.storage.local.set({ agents })
+      }
       updateLoop(3600 * 1000)
     })
   }, delay)
