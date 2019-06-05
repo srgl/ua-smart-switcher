@@ -57,14 +57,14 @@ const init = () => {
   })
 
   chrome.storage.local.get(null, values => {
-    if (!values.os) {
+    for (let key in values) {
+      state[key] = values[key]
+    }
+
+    if (!values.browser) {
       chrome.storage.local.set(initialState)
     } else if (!values.agents) {
       chrome.storage.local.set({ agents })
-    } else {
-      for (let key in values) {
-        state[key] = values[key]
-      }
     }
   })
 }
