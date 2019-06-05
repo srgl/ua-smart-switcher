@@ -25,5 +25,7 @@ const injectScript = ua => {
 }
 
 chrome.storage.local.get(null, state => {
-  if (state.enabled) injectScript(state.ua)
+  if (state.enabled) {
+    injectScript(state.agents[state.os][state.browser].string)
+  }
 })

@@ -1,0 +1,25 @@
+{
+  "ui": [
+    { "platform": "windows", "browsers": [ "chrome", "firefox", "edge", "ie" ] },
+    { "platform": "mac_os", "browsers": [ "safari", "chrome", "firefox" ] },
+    { "platform": "linux", "browsers": [ "chrome", "firefox" ] },
+    { "platform": "android", "browsers": [ "chrome", "android_browser", "samsung_browser" ] },
+    { "platform": "ios", "browsers": [ "safari", "chrome" ] }
+  ],
+  "platforms": {
+    "windows": { "name": "Windows" },
+    "mac_os": { "name": "macOS" },
+    "linux": { "name": "Linux" },
+    "android": { "name": "Android" },
+    "ios": { "name": "iOS" }
+  },
+  "browsers": {
+    "safari": { "name": "Safari" },
+    "chrome": { "name": "Chrome" },
+    "firefox": { "name": "Firefox" },
+    "edge": { "name": "Edge" },
+    "ie": { "name": "IE" },
+    "samsung_browser": { "name": "Samsung" },
+    "android_browser": { "name": "Android" }
+  }
+}
