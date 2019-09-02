@@ -1,6 +1,21 @@
 import config from '../config'
 import agents from '../agents'
 
+const badges = {
+  'windows': 'w',
+  'linux': 'l',
+  'mac_os': 'm',
+  'ios': 'i',
+  'android': 'a',
+  'chrome': 'cr',
+  'firefox': 'ff',
+  'ie': 'ie',
+  'edge': 'eg',
+  'android_browser': 'ab',
+  'samsung_browser': 'sb',
+  'safari': 'sf'
+}
+
 const initialState = {
   enabled: false,
   os: config.ui[0].platform,
@@ -22,7 +37,7 @@ const onBeforeSendHeaders = ({ requestHeaders }) => {
 
 const getAgents = callback => {
   const xhr = new XMLHttpRequest()
-  xhr.open('GET', 'https://api.uastrings.com/v1/user_agents/latest', true)
+  xhr.open('GET', 'https://uas.ztdev.com/v1/user_agents/latest', true)
   xhr.onreadystatechange = () => {
     if (xhr.readyState === 4) {
       if (xhr.status === 200) return callback(JSON.parse(xhr.responseText).results)
@@ -43,8 +58,18 @@ const updateLoop = (delay) => {
   }, delay)
 }
 
+const updateBadge = () => {
+  if (!state.enabled) {
+    chrome.browserAction.setBadgeText({ text: 'Off' })
+  } else if (state.os && state.browser) {
+    const text = `${badges[state.os]}/${badges[state.browser]}`.toUpperCase()
+    chrome.browserAction.setBadgeText({ text })
+  }
+}
+
 const init = () => {
   updateLoop(2000)
+  updateBadge()
 
   chrome.webRequest.onBeforeSendHeaders.addListener(
     onBeforeSendHeaders,
@@ -56,6 +81,7 @@ const init = () => {
     for (let key in values) {
       state[key] = values[key].newValue
     }
+    updateBadge()
   })
 
   chrome.storage.local.get(null, values => {
@@ -70,5 +96,4 @@ const init = () => {
     }
   })
 }
-
 init()

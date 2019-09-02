@@ -7,19 +7,19 @@
     { "platform": "ios", "browsers": [ "safari", "chrome" ] }
   ],
   "platforms": {
-    "windows": { "name": "Windows" },
-    "mac_os": { "name": "macOS" },
-    "linux": { "name": "Linux" },
-    "android": { "name": "Android" },
-    "ios": { "name": "iOS" }
+    "windows": { "name": "Windows", "badge": "w" },
+    "mac_os": { "name": "macOS", "badge": "m" },
+    "linux": { "name": "Linux", "badge": "l" },
+    "android": { "name": "Android", "badge": "a" },
+    "ios": { "name": "iOS", "badge": "i" }
   },
   "browsers": {
-    "safari": { "name": "Safari" },
-    "chrome": { "name": "Chrome" },
-    "firefox": { "name": "Firefox" },
-    "edge": { "name": "Edge" },
-    "ie": { "name": "IE" },
-    "samsung_browser": { "name": "Samsung" },
-    "android_browser": { "name": "Android" }
+    "safari": { "name": "Safari", "badge": "sf" },
+    "chrome": { "name": "Chrome", "badge": "cr" },
+    "firefox": { "name": "Firefox", "badge": "ff" },
+    "edge": { "name": "Edge", "badge": "eg" },
+    "ie": { "name": "IE", "badge": "ie" },
+    "samsung_browser": { "name": "Samsung", "badge": "sb" },
+    "android_browser": { "name": "Android", "badge": "ab" }
   }
 }
