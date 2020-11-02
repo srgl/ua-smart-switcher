@@ -15,10 +15,10 @@ const getScript = ua => {
         return ''
       }
     });
-  `.replace(/\s+/g, ' ')
+  `
 }
 
-const injectScript = ua => {
+const addScript = ua => {
   const script = document.createElement('script')
   script.innerText = getScript(ua)
   document.head.appendChild(script)
@@ -26,6 +26,6 @@ const injectScript = ua => {
 
 chrome.storage.local.get(null, state => {
   if (state.enabled) {
-    injectScript(state.agents[state.os][state.browser].string)
+    addScript(state.custom ? state.customUA : state.browsers[state.browser][state.os].ua)
   }
 })

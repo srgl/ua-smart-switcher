@@ -6,12 +6,15 @@ class Popup extends Component {
     super()
     chrome.storage.local.get(null, state => {
       this.setState({
-        agents: state.agents,
+        browsers: state.browsers,
         enabled: state.enabled,
+        custom: state.custom,
+        customUA: state.customUA,
         os: state.os,
         browser: state.browser
       })
     })
+    this.checkUrl = 'https://www.whatsmyua.info/'
   }
 
   close () {
@@ -27,10 +30,15 @@ class Popup extends Component {
 
   setOs (e) {
     const os = e.target.value
-    const browser = config.ui
-      .find(({ platform }) => platform === os).browsers[0]
-    this.setState({ os, browser })
-    chrome.storage.local.set({ os, browser })
+    if (os === 'custom') {
+      this.setState({ custom: true })
+      chrome.storage.local.set({ custom: true })
+    } else {
+      const browser = config.ui
+        .find(({ platform }) => platform === os).browsers[0]
+      this.setState({ custom: false, os, browser })
+      chrome.storage.local.set({ custom: false, os, browser })
+    }
   }
 
   setBrowser (e) {
@@ -38,6 +46,13 @@ class Popup extends Component {
     this.setState({ browser })
     chrome.storage.local.set({ browser })
     this.close()
+  }
+
+  setCustomUA (e) {
+    const customUA = e.target.value || ''
+    console.log(customUA)
+    this.setState({ customUA })
+    chrome.storage.local.set({ customUA })
   }
 
   trimVersion (version) {
@@ -51,7 +66,7 @@ class Popup extends Component {
   }
 
   render (props, state) {
-    if (!state.agents) return
+    if (!state.browsers) return
     return <div class="popup">
       <div class="row">
         <h3 class="header">UA Smart Switcher</h3>
@@ -66,28 +81,37 @@ class Popup extends Component {
       <div class="row">
         <span>Platform:</span>
         <select class="right" disabled={!state.enabled}
-          value={state.os} onChange={this.setOs.bind(this)}>
+          value={state.custom ? 'custom' : state.os} onChange={this.setOs.bind(this)}>
           {
             config.ui.map(({ platform }) => (
               <option value={platform}>{config.platforms[platform].name}</option>
             ))
           }
+          <option value="custom">Custom UA</option>
         </select>
       </div>
-      <div class="row">
-        <span>Browser:</span>
-        <select class="right" disabled={!state.enabled}
-          value={state.browser} onChange={this.setBrowser.bind(this)}>
-          {
-            config.ui.find(({ platform }) => platform === state.os).browsers.map(browser => {
-              const agent = state.agents[state.os][browser]
-              return <option value={browser}>
-                {config.browsers[browser].name} {this.trimVersion(agent.version)}
-              </option>
-            })
-          }
-        </select>
-      </div>
+      {
+        !state.custom && <div class="row">
+          <span>Browser:</span>
+          <select class="right" disabled={!state.enabled}
+            value={state.browser} onChange={this.setBrowser.bind(this)}>
+            {
+              config.ui.find(({ platform }) => platform === state.os).browsers.map(browser => {
+                const agent = state.browsers[browser][state.os]
+                return <option value={browser}>
+                  {config.browsers[browser].name} {this.trimVersion(agent.version)}
+                </option>
+              })
+            }
+          </select>
+        </div>
+      }
+      {
+        state.custom && <div class="row">
+          <textarea disabled={!state.enabled} placeholder="Paste a user agent string here"
+            onInput={this.setCustomUA.bind(this)}>{state.customUA}</textarea>
+        </div>
+      }
     </div>
   }
 }
