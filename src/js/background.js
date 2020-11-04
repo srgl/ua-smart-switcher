@@ -13,8 +13,8 @@ const initialState = {
 const state = {}
 
 const onBeforeSendHeaders = ({ requestHeaders }) => {
-  if (state.enabled && requestHeaders && requestHeaders.length) {
-    const header = requestHeaders.find(h => h.name === 'User-Agent')
+  if (state.enabled) {
+    const header = (requestHeaders || []).find(h => h.name === 'User-Agent')
     if (header) {
       header.value = state.custom ? state.customUA : state.browsers[state.browser][state.os].ua
       return { requestHeaders }
