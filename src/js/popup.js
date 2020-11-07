@@ -65,11 +65,16 @@ class Popup extends Component {
     return version
   }
 
+  openCheckPage () {
+    chrome.tabs.create({ url: 'https://www.whatsmyua.info/' })
+  }
+
   render (props, state) {
     if (!state.browsers) return
     return <div class="popup">
       <div class="row">
         <h3 class="header">UA Smart Switcher</h3>
+        <a href="" class="check" onClick={this.openCheckPage}>check</a>
         { state.enabled != null &&
           <label class="switch right">
             <input type="checkbox" checked={state.enabled}

@@ -22,25 +22,27 @@ const onBeforeSendHeaders = ({ requestHeaders }) => {
   }
 }
 
-const updateLoop = (delay) => {
+const updateBrowsers = browsers => {
+  Object.keys(browsers).forEach(browser => {
+    Object.keys(browsers[browser]).forEach(platform => {
+      browsers[browser][platform].ua = browsers[browser][platform].ua.replace(/[='"\\]/g, '')
+    })
+  })
+  chrome.storage.local.set({ browsers })
+}
+
+const updateLoop = delay => {
   setTimeout(() => {
     const xhr = new XMLHttpRequest()
     xhr.open('GET', 'https://uas.ztdev.com/v2/browsers/latest', true)
     xhr.onreadystatechange = () => {
-      if (xhr.readyState === 4) {
-        if (xhr.status === 200) {
-          try {
-            const browsers = JSON.parse(xhr.responseText)
-            if (Object.keys(browsers).length) chrome.storage.local.set({ browsers })
-          } catch (e) {
-            console.log('Unable to parse JSON:', e)
-          }
-        }
-
-        updateLoop(3600 * 1000)
+      if (xhr.readyState === 4 && xhr.status === 200) {
+        const browsers = JSON.parse(xhr.responseText)
+        updateBrowsers(browsers)
       }
     }
     xhr.send()
+    updateLoop(3600 * 1000)
   }, delay)
 }
 
