@@ -1,5 +1,6 @@
 import { h, render, Component } from 'preact'
 import config from '../config'
+const chrome = window.chrome
 
 class Popup extends Component {
   constructor () {
@@ -14,7 +15,6 @@ class Popup extends Component {
         browser: state.browser
       })
     })
-    this.checkUrl = 'https://www.whatsmyua.info/'
   }
 
   close () {
@@ -66,7 +66,7 @@ class Popup extends Component {
   }
 
   openCheckPage () {
-    chrome.tabs.create({ url: 'https://www.whatsmyua.info/' })
+    chrome.tabs.create({ url: 'https://www.google.com/search?q=my+user+agent' })
   }
 
   render (props, state) {
