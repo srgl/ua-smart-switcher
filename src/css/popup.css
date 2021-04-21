@@ -54,3 +54,17 @@ a, a:visited, a:hover, a:active {
   font-size: 12px;
   color: blue;
 }
+
+.rate {
+  font-size: 12px;
+}
+
+.rate .star {
+  color: gray;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.rate .star.gold {
+  color: gold;
+}

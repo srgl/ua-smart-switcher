@@ -69,12 +69,20 @@ class Popup extends Component {
     chrome.tabs.create({ url: 'https://www.google.com/search?q=my+user+agent' })
   }
 
+  openRatePage () {
+    chrome.tabs.create({ url: 'https://chrome.google.com/webstore/detail/user-agent-smart-switcher/dgdmfclijcondkaobmpgbmibaaocfdpj/reviews' })
+  }
+
+  openDonatePage () {
+    chrome.tabs.create({ url: 'https://paypal.me/srglbnv' })
+  }
+
   render (props, state) {
     if (!state.browsers) return
     return <div class="popup">
       <div class="row">
         <h3 class="header">UA Smart Switcher</h3>
-        <a href="" class="check" onClick={this.openCheckPage}>check</a>
+        <a href="" onClick={this.openCheckPage}>check</a>
         { state.enabled != null &&
           <label class="switch right">
             <input type="checkbox" checked={state.enabled}
@@ -117,6 +125,15 @@ class Popup extends Component {
             onInput={this.setCustomUA.bind(this)}>{state.customUA}</textarea>
         </div>
       }
+      <div class="rate">Please rate extension&nbsp;
+        <span class={'star' + (state.rate > 0 ? ' gold' : '')} onClick={this.openRatePage} onMouseLeave={() => this.setState({ rate: 0 })} onMouseEnter={() => this.setState({ rate: 1 })}>&#9733;</span>
+        <span class={'star' + (state.rate > 1 ? ' gold' : '')} onClick={this.openRatePage} onMouseLeave={() => this.setState({ rate: 0 })} onMouseEnter={() => this.setState({ rate: 2 })}>&#9733;</span>
+        <span class={'star' + (state.rate > 2 ? ' gold' : '')} onClick={this.openRatePage} onMouseLeave={() => this.setState({ rate: 0 })} onMouseEnter={() => this.setState({ rate: 3 })}>&#9733;</span>
+        <span class={'star' + (state.rate > 3 ? ' gold' : '')} onClick={this.openRatePage} onMouseLeave={() => this.setState({ rate: 0 })} onMouseEnter={() => this.setState({ rate: 4 })}>&#9733;</span>
+        <span class={'star' + (state.rate > 4 ? ' gold' : '')} onClick={this.openRatePage} onMouseLeave={() => this.setState({ rate: 0 })} onMouseEnter={() => this.setState({ rate: 5 })}>&#9733;</span>
+        &nbsp;or <a href="" onClick={this.openDonatePage}>donate</a>
+      </div>
+
     </div>
   }
 }
