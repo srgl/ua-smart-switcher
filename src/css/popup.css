@@ -63,6 +63,7 @@ a, a:visited, a:hover, a:active {
   color: gray;
   font-size: 16px;
   cursor: pointer;
+  vertical-align: middle;
 }
 
 .rate .star.gold {
