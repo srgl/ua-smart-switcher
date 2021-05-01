@@ -9,8 +9,9 @@ class Popup extends Component {
       this.setState({
         browsers: state.browsers,
         enabled: state.enabled,
+        customs: state.customs,
         custom: state.custom,
-        customUA: state.customUA,
+        customId: state.customId,
         os: state.os,
         browser: state.browser
       })
@@ -30,9 +31,10 @@ class Popup extends Component {
 
   setOs (e) {
     const os = e.target.value
-    if (os === 'custom') {
-      this.setState({ custom: true })
-      chrome.storage.local.set({ custom: true })
+    if (os.startsWith('custom')) {
+      const customId = os.split('custom')[1]
+      this.setState({ custom: true, customId })
+      chrome.storage.local.set({ custom: true, customId })
     } else {
       const browser = config.ui
         .find(({ platform }) => platform === os).browsers[0]
@@ -49,10 +51,33 @@ class Popup extends Component {
   }
 
   setCustomUA (e) {
-    const customUA = e.target.value || ''
-    console.log(customUA)
-    this.setState({ customUA })
-    chrome.storage.local.set({ customUA })
+    const ua = e.target.value || ''
+    const customs = [...this.state.customs]
+    customs[this.state.customId].ua = ua
+    this.setState({ customs })
+    chrome.storage.local.set({ customs })
+  }
+
+  setCustomName (e) {
+    const name = e.target.value || ''
+    const customs = [...this.state.customs]
+    customs[this.state.customId].name = name
+    this.setState({ customs })
+    chrome.storage.local.set({ customs })
+  }
+
+  addCustom (e) {
+    const customs = [...this.state.customs]
+    customs.push({ name: `Custom ${customs.length + 1}`, ua: customs[customs.length - 1].ua })
+    this.setState({ customs, customId: customs.length - 1 })
+    chrome.storage.local.set({ customs, customId: customs.length - 1 })
+  }
+
+  deleteCustom (e) {
+    const customs = [...this.state.customs]
+    customs.splice(this.state.customId, 1)
+    this.setState({ customs, customId: customs.length - 1 })
+    chrome.storage.local.set({ customs, customId: customs.length - 1 })
   }
 
   trimVersion (version) {
@@ -98,13 +123,17 @@ class Popup extends Component {
       <div class="row">
         <span>Platform:</span>
         <select class="right" disabled={!state.enabled}
-          value={state.custom ? 'custom' : state.os} onChange={this.setOs.bind(this)}>
+          value={state.custom ? `custom${state.customId}` : state.os} onChange={this.setOs.bind(this)}>
           {
             config.ui.map(({ platform }) => (
               <option value={platform}>{config.platforms[platform].name}</option>
             ))
           }
-          <option value="custom">Custom UA</option>
+          {
+            (state.customs || []).map((c, i) => (
+              <option value={`custom${i}`}>{c.name}</option>
+            ))
+          }
         </select>
       </div>
       {
@@ -124,9 +153,18 @@ class Popup extends Component {
         </div>
       }
       {
-        state.custom && <div class="row">
-          <textarea disabled={!state.enabled} placeholder="Paste a user agent string here"
-            onInput={this.setCustomUA.bind(this)}>{state.customUA}</textarea>
+        state.custom && <div>
+          <div class="row">
+            <input type="text" value={state.customs[state.customId].name}
+              onInput={this.setCustomName.bind(this)} disabled={!state.enabled}></input>
+            <button class="right" onClick={this.addCustom.bind(this)} disabled={!state.enabled}>Add</button>
+            <button class="right" onClick={this.deleteCustom.bind(this)}
+              disabled={!state.enabled || state.customs.length < 2}>Delete</button>
+          </div>
+          <div class="row">
+            <textarea disabled={!state.enabled} placeholder="Enter a user agent string here"
+              onInput={this.setCustomUA.bind(this)} value={state.customs[state.customId].ua}></textarea>
+          </div>
         </div>
       }
       <div class="rate">Please rate extension&nbsp;

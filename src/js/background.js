@@ -3,11 +3,17 @@ import browsers from '../browsers'
 
 const initialState = {
   enabled: false,
-  custom: false,
-  customUA: browsers[config.ui[0].browsers[0]][config.ui[0].platform].ua,
   os: config.ui[0].platform,
   browser: config.ui[0].browsers[0],
-  browsers
+  browsers,
+  custom: false,
+  customId: 0,
+  customs: [
+    {
+      name: 'Custom 1',
+      ua: browsers[config.ui[0].browsers[0]][config.ui[0].platform].ua
+    }
+  ]
 }
 
 const state = {}
@@ -16,7 +22,8 @@ const onBeforeSendHeaders = ({ requestHeaders }) => {
   if (state.enabled) {
     const header = (requestHeaders || []).find(h => h.name === 'User-Agent')
     if (header) {
-      header.value = state.custom ? state.customUA : state.browsers[state.browser][state.os].ua
+      header.value = state.custom ? state.customs[state.customId].ua
+        : state.browsers[state.browser][state.os].ua
       return { requestHeaders }
     }
   }
@@ -50,7 +57,9 @@ const updateBadge = () => {
   if (!state.enabled) {
     chrome.browserAction.setBadgeText({ text: 'OFF' })
   } else if (state.custom) {
-    chrome.browserAction.setBadgeText({ text: 'CUST' })
+    chrome.browserAction.setBadgeText({
+      text: state.customs[state.customId].name.slice(0, 4).toUpperCase()
+    })
   } else if (state.os && state.browser) {
     const text = config.platforms[state.os].badge + '/' +
       config.browsers[state.browser].badge

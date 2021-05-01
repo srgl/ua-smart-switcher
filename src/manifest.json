@@ -1,7 +1,7 @@
 {
   "name": "User-Agent Smart Switcher",
   "description": "Switch easily between platforms and browsers",
-  "version": "1.3.4",
+  "version": "1.4.0",
   "author": "Sergei L",
   "icons": {
     "128": "icon-128.png"
