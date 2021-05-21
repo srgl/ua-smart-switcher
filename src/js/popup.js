@@ -103,7 +103,7 @@ class Popup extends Component {
   }
 
   openDonatePage () {
-    chrome.tabs.create({ url: 'https://paypal.me/srglbnv' })
+    chrome.tabs.create({ url: 'https://ztdev.com/donate' })
   }
 
   render (props, state) {
